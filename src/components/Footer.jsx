@@ -27,7 +27,7 @@ export default function Footer() {
             SOFTWARE ENGINEER
           </p>
           <p className="font-mono text-[11px] text-[#ff7849] tracking-wider mt-1">
-            REACT.JS • REACT NATIVE • JAVASCRIPT
+            REACT.JS • REACT NATIVE • NODE.JS • MYSQL
           </p>
         </div>
 

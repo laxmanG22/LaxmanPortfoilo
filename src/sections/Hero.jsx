@@ -94,17 +94,17 @@ export default function Hero() {
             </motion.div>
 
             {/* Step 2: Main Dramatic Typography */}
-            <div className="overflow-hidden mb-1">
+            <div className="overflow-hidden mb-1 pr-4 py-1">
               <motion.div variants={titleWordVariants}>
-                <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-extrabold tracking-tighter text-white leading-[0.95]">
+                <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-extrabold tracking-tighter text-white leading-[0.98] pr-2">
                   LAXMAN
                 </h1>
               </motion.div>
             </div>
 
-            <div className="overflow-hidden mb-4">
+            <div className="overflow-hidden mb-4 pr-6 py-1">
               <motion.div variants={titleWordVariants}>
-                <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-extrabold tracking-tighter bg-gradient-to-r from-white via-[#cbd5e1] to-[#ff7849] bg-clip-text text-transparent leading-[0.95]">
+                <h1 className="text-5xl sm:text-6xl md:text-7xl xl:text-8xl font-extrabold tracking-tighter bg-gradient-to-r from-white via-[#cbd5e1] to-[#ff7849] bg-clip-text text-transparent leading-[0.98] pr-4">
                   GUDIMALLA
                 </h1>
               </motion.div>
@@ -177,7 +177,7 @@ export default function Hero() {
           </motion.div>
 
           {/* Right Column: Interactive Professional Portrait */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end order-first lg:order-last">
+          <div className="lg:col-span-5 flex justify-center lg:justify-end">
             <HeroPortrait />
           </div>
         </div>

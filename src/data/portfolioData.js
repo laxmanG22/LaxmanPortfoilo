@@ -8,7 +8,7 @@ export const PERSONAL_INFO = {
   location: "Hyderabad, India",
   email: "gudimallalaxman@gmail.com",
   phone: "8341375904",
-  status: "AVAILABLE FOR ENGINEERING ROLES",
+  status: "OPEN TO SOFTWARE ENGINEERING ROLES",
   keywords: [
     "REACT.JS",
     "REACT NATIVE",
@@ -29,9 +29,10 @@ export const ABOUT_DATA = {
   ],
   pillars: [
     { label: "Frontend & Mobile", value: "React.js • React Native • JavaScript" },
-    { label: "Geospatial & Spatial", value: "Interactive Maps • Polygons • Route Systems" },
     { label: "Backend & Systems", value: "REST APIs • Node.js • Express • MySQL" },
-    { label: "Production Lifecycle", value: "Play Store • App Store • Optimization" }
+    { label: "Production Lifecycle", value: "Play Store • App Store • Optimization" },
+    { label: "Geospatial & Spatial", value: "Interactive Maps • Polygons • Route Systems" }
+
   ]
 };
 
@@ -83,7 +84,7 @@ export const EXPERIENCE_DATA = [
       "Handling production builds and store submission pipelines on Google Play Console and App Store Connect.",
       "Conducting code reviews, enforcing architectural guidelines, and upholding modern engineering best practices across development sprints."
     ],
-    skills: ["React.js", "React Native", "REST APIs", "Location Services", "Map Features", "Auth/RBAC", "Play Store", "App Store Connect"]
+    skills: ["React.js", "React Native", "REST APIs", "Location Services", "Map Features", "Auth", "Play Store", "App Store Connect"]
   }
 ];
 
@@ -110,12 +111,32 @@ export const PROJECTS_DATA = [
       "Spatial Parcel Layouts",
       "Turn-by-turn Routing"
     ],
-    visualizationType: "map"
+    visualizationType: "map",
+    links: [
+      {
+        title: "Website Link",
+        url: "https://acrex.netlify.app/",
+        type: "website",
+        description: "Official AcreX Web Application"
+      },
+      {
+        title: "Playstore App Link",
+        url: "https://play.google.com/store/apps/details?id=com.acrex.app",
+        type: "playstore",
+        description: "Android Mobile App on Google Play"
+      },
+      {
+        title: "Appstore App Link",
+        url: "https://apps.apple.com/in/app/acre-x/id6762609505",
+        type: "appstore",
+        description: "iOS Mobile App on Apple App Store"
+      }
+    ]
   },
   {
     id: "tejaswi",
     number: "02",
-    name: "Tejaswi",
+    name: "Tejaswi Golf Carts",
     period: "08/2025 — 01/2026",
     tagline: "Multi-Tier Field Service & Dispatch Ecosystem",
     stack: ["React.js", "React Native", "REST APIs", "Google Maps Deep Linking", "Location Tracking"],
@@ -134,7 +155,27 @@ export const PROJECTS_DATA = [
       "Google Maps Deep Linking",
       "Customer Mobile Portal"
     ],
-    visualizationType: "route"
+    visualizationType: "route",
+    links: [
+      {
+        title: "Website Link",
+        url: "https://userapp.tejaswigroup.com/",
+        type: "website",
+        description: "Customer Web Application & Portal"
+      },
+      {
+        title: "Playstore App Link",
+        url: "https://play.google.com/store/apps/details?id=com.tge.technician",
+        type: "playstore",
+        description: "Field Technician Mobile App on Google Play"
+      },
+      {
+        title: "Appstore App Link",
+        url: "https://apps.apple.com/in/app/tge-ev/id6783334931",
+        type: "appstore",
+        description: "iOS Mobile App on Apple App Store"
+      }
+    ]
   },
   {
     id: "satyasakshi",
@@ -158,7 +199,15 @@ export const PROJECTS_DATA = [
       "Optimized Data Tables",
       "Fleet & System Registry"
     ],
-    visualizationType: "dashboard"
+    visualizationType: "dashboard",
+    links: [
+      {
+        title: "Website Link",
+        url: "https://satyasakshipoc.spaplc.com/",
+        type: "website",
+        description: "Enterprise Fleet Governance Platform"
+      }
+    ]
   }
 ];
 
@@ -195,7 +244,8 @@ export const TECH_STACK = {
     { name: "GitHub Copilot", desc: "Accelerated inline code generation" },
     { name: "Cursor AI", desc: "Agentic development & semantic workspace edits" },
     { name: "Claude AI", desc: "Deep reasoning & system design exploration" },
-    { name: "Cline", desc: "Autonomous CLI agent workflows" }
+    { name: "Cline", desc: "Autonomous CLI agent workflows" },
+    { name: "Antigravity", desc: "Advanced agentic coding, multi-agent orchestration & autonomous task execution" }
   ]
 };
 

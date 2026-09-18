@@ -28,12 +28,7 @@ export default function Contact() {
 
       <div className="page-container w-full max-w-[1400px] mx-auto px-5 sm:px-10 lg:px-16 relative z-10 text-center">
         {/* Section Label */}
-        <ScrollReveal>
-          <div className="inline-flex items-center gap-2 font-mono text-xs text-[#ff5722] tracking-widest uppercase mb-6 px-3.5 py-1 rounded-full bg-white/[0.03] border border-white/[0.08]">
-            <span className="w-2 h-2 rounded-full bg-[#ff5722]" />
-            <span>07 // INITIATE DIALOGUE</span>
-          </div>
-        </ScrollReveal>
+        
 
         {/* Dramatic Large Typography */}
         <div className="mb-8">
@@ -75,7 +70,7 @@ export default function Contact() {
 
         {/* Contact Info Cards */}
         <ScrollReveal delay={0.4}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
             {/* Email Card */}
             <Spotlight
               spotlightColor="rgba(255, 87, 34, 0.15)"

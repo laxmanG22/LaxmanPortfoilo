@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ScrollReveal from '../animations/ScrollReveal';
 import Spotlight from '../animations/Spotlight';
 import Magnetic from '../animations/Magnetic';
@@ -9,7 +9,9 @@ import TejaswiRouteVisual from '../components/visualizations/TejaswiRouteVisual'
 import SatyasakshiDashboardVisual from '../components/visualizations/SatyasakshiDashboardVisual';
 
 export default function Projects({ onSelectProject }) {
-  const [activeProjectTab, setActiveProjectTab] = useState('acrex');
+  const [activeProjectTab, setActiveProjectTab] = useState(PROJECTS_DATA[0].id);
+  const isInteractingRef = useRef(false);
+  const timeoutRef = useRef(null);
 
   const renderVisual = (type) => {
     switch (type) {
@@ -24,15 +26,69 @@ export default function Projects({ onSelectProject }) {
     }
   };
 
-  return (
-    <section id="work" className="section-wrapper w-full relative py-24 sm:py-32 lg:py-36 bg-[#050508] border-t border-white/[0.08] overflow-hidden">
-      {/* Background radial glow */}
-      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-[#ff5722]/5 rounded-full blur-[160px] pointer-events-none" />
+  const scrollToProject = (id) => {
+    setActiveProjectTab(id);
+    isInteractingRef.current = true;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, 1200);
 
-      <div className="page-container w-full max-w-[1400px] mx-auto px-5 sm:px-10 lg:px-16">
+    const el = document.getElementById(`project-${id}`);
+    if (el) {
+      const yOffset = -130;
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
+  // Track active project card during scroll
+  useEffect(() => {
+    const observerCallback = (entries) => {
+      if (isInteractingRef.current) return;
+
+      const visible = entries.filter((e) => e.isIntersecting);
+      if (visible.length > 0) {
+        // Pick the top-most visible project card
+        const topEntry = visible.reduce((prev, curr) =>
+          prev.boundingClientRect.top < curr.boundingClientRect.top ? prev : curr
+        );
+        const projId = topEntry.target.getAttribute('data-project-id');
+        if (projId && projId !== activeProjectTab) {
+          setActiveProjectTab(projId);
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      root: null,
+      rootMargin: '-20% 0px -40% 0px',
+      threshold: 0.15,
+    });
+
+    const projectCards = document.querySelectorAll('[data-project-id]');
+    projectCards.forEach((card) => observer.observe(card));
+
+    return () => {
+      observer.disconnect();
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [activeProjectTab]);
+
+  return (
+    <section
+      id="work"
+      className="section-wrapper w-full relative py-24 sm:py-32 lg:py-36 bg-[#050508] border-t border-white/[0.08]"
+    >
+      {/* Background radial glow isolated from layout */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-[#ff5722]/5 rounded-full blur-[160px]" />
+      </div>
+
+      <div className="page-container w-full max-w-[1400px] mx-auto px-5 sm:px-10 lg:px-16 relative z-10">
         {/* Section Header */}
         <ScrollReveal>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 pb-6 border-b border-white/[0.08] gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 pb-6 border-b border-white/[0.08] gap-4">
             <div>
               <div className="flex items-center gap-2 font-mono text-xs text-[#ff5722] tracking-widest uppercase mb-2">
                 <span className="w-2 h-2 rounded-full bg-[#ff5722]" />
@@ -48,130 +104,141 @@ export default function Projects({ onSelectProject }) {
           </div>
         </ScrollReveal>
 
-        {/* Project Navigation Quick Tabs */}
-        <div className="flex items-center gap-3 mb-12 overflow-x-auto pb-2 scrollbar-none font-mono text-xs">
-          {PROJECTS_DATA.map((proj) => (
-            <button
-              key={proj.id}
-              onClick={() => {
-                setActiveProjectTab(proj.id);
-                const el = document.getElementById(`project-${proj.id}`);
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              }}
-              className={`px-4 py-2 rounded-full border transition-all cursor-pointer whitespace-nowrap ${
-                activeProjectTab === proj.id
-                  ? 'bg-[#ff5722]/15 border-[#ff5722] text-white shadow-[0_0_12px_rgba(255,87,34,0.2)]'
-                  : 'bg-white/[0.03] border-white/[0.08] text-[#94a3b8] hover:text-white hover:border-white/[0.2]'
-              }`}
-            >
-              {proj.number} // {proj.name.toUpperCase()}
-            </button>
-          ))}
+        {/* Project Navigation Quick Tabs (Sticky below header for comfortable access) */}
+        <div className="sticky top-16 sm:top-20 z-40 bg-[#050508]/90 backdrop-blur-md py-3.5 mb-10 border-b border-white/[0.08] flex items-center gap-2.5 overflow-x-auto scrollbar-none">
+          {PROJECTS_DATA.map((proj) => {
+            const isCurrent = activeProjectTab === proj.id;
+            return (
+              <button
+                key={proj.id}
+                onClick={() => scrollToProject(proj.id)}
+                className={`px-4 py-2 rounded-full border text-xs font-mono transition-all duration-300 cursor-pointer whitespace-nowrap flex items-center gap-2 ${
+                  isCurrent
+                    ? 'bg-[#ff5722] text-black font-bold shadow-[0_0_15px_rgba(255,87,34,0.35)]'
+                    : 'bg-white/[0.03] border-white/[0.08] text-[#94a3b8] hover:text-white hover:border-white/[0.2]'
+                }`}
+              >
+                <span>{proj.number} //</span>
+                <span>{proj.name.toUpperCase()}</span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Showcase Items (Large Sticky-Feel Showcase Stack) */}
-        <div className="space-y-16 sm:space-y-24">
-          {PROJECTS_DATA.map((project) => (
-            <div
-              key={project.id}
-              id={`project-${project.id}`}
-              className="scroll-mt-28"
-            >
-              <Spotlight
-                spotlightColor="rgba(255, 87, 34, 0.14)"
-                spotlightSize={600}
-                className="group rounded-2xl bg-[#09090e] border border-white/[0.08] hover:border-[#ff5722]/40 p-6 sm:p-10 transition-all duration-300"
+        {/* =========================================================================
+            SMOOTH STACKING CARDS CONTAINER
+            Each project is rendered in a full card that sticks and stacks on top as you scroll.
+            ========================================================================= */}
+        <div className="relative pb-16">
+          {PROJECTS_DATA.map((project, idx) => {
+            const isLast = idx === PROJECTS_DATA.length - 1;
+            return (
+              <div
+                key={project.id}
+                id={`project-${project.id}`}
+                data-project-id={project.id}
+                className={`w-full scroll-mt-36 ${isLast ? 'mb-8' : 'mb-32 sm:mb-44'}`}
+                style={{
+                  position: 'sticky',
+                  top: `${95 + idx * 24}px`,
+                  zIndex: 10 + idx,
+                }}
               >
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                  {/* Left Column: Project Details & Breakdown */}
-                  <div className="lg:col-span-6 space-y-6">
-                    {/* Top Metadata */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 font-mono text-xs text-[#ff6b35]">
-                        <span>PROJECT {project.number}</span>
-                        <span>•</span>
-                        <span>{project.period}</span>
-                      </div>
-                      <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-white/[0.04] text-[#94a3b8] border border-white/[0.06]">
-                        {project.stack[0]} + {project.stack[1]}
-                      </span>
-                    </div>
-
-                    {/* Title & Tagline */}
-                    <div>
-                      <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight group-hover:text-[#ff7849] transition-colors">
-                        {project.name}
-                      </h3>
-                      <p className="text-sm sm:text-base text-[#94a3b8] mt-1 font-medium">
-                        {project.tagline}
-                      </p>
-                    </div>
-
-                    {/* Summary */}
-                    <p className="text-sm text-[#cbd5e1] leading-relaxed">
-                      {project.summary}
-                    </p>
-
-                    {/* Feature Bullets from Resume */}
-                    <div className="space-y-2">
-                      <div className="font-mono text-xs text-[#64748b] uppercase tracking-wider">
-                        // Key Engineering Highlights
-                      </div>
-                      {project.whatIBuilt.slice(0, 3).map((item, i) => (
-                        <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#cbd5e1]">
-                          <CheckCircle2 size={15} className="text-[#ff5722] mt-0.5 shrink-0" />
-                          <span>{item}</span>
+                <Spotlight
+                  spotlightColor="rgba(255, 87, 34, 0.16)"
+                  spotlightSize={600}
+                  className="group rounded-3xl bg-[#09090f] border border-white/[0.1] hover:border-[#ff5722]/50 p-6 sm:p-10 transition-all duration-300 shadow-[0_-15px_50px_rgba(0,0,0,0.9)]"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    {/* Left Column: Project Details & Breakdown */}
+                    <div className="lg:col-span-6 space-y-6">
+                      {/* Top Metadata */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 font-mono text-xs text-[#ff6b35]">
+                          <span>PROJECT {project.number}</span>
+                          <span>•</span>
+                          <span>{project.period}</span>
                         </div>
-                      ))}
-                    </div>
-
-                    {/* Stack Badges */}
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {project.stack.map((stk) => (
-                        <span
-                          key={stk}
-                          className="px-2.5 py-1 rounded text-xs font-mono bg-white/[0.03] text-[#94a3b8] border border-white/[0.06]"
-                        >
-                          {stk}
+                        <span className="font-mono text-xs px-2.5 py-0.5 rounded bg-white/[0.04] text-[#94a3b8] border border-white/[0.06]">
+                          {project.stack[0]} + {project.stack[1]}
                         </span>
-                      ))}
+                      </div>
+
+                      {/* Title & Tagline */}
+                      <div>
+                        <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight group-hover:text-[#ff7849] transition-colors">
+                          {project.name}
+                        </h3>
+                        <p className="text-sm sm:text-base text-[#94a3b8] mt-1 font-medium">
+                          {project.tagline}
+                        </p>
+                      </div>
+
+                      {/* Summary */}
+                      <p className="text-sm text-[#cbd5e1] leading-relaxed">
+                        {project.summary}
+                      </p>
+
+                      {/* Feature Bullets from Resume */}
+                      <div className="space-y-2">
+                        <div className="font-mono text-xs text-[#64748b] uppercase tracking-wider">
+                          // Key Engineering Highlights
+                        </div>
+                        {project.whatIBuilt.slice(0, 3).map((item, i) => (
+                          <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-[#cbd5e1]">
+                            <CheckCircle2 size={15} className="text-[#ff5722] mt-0.5 shrink-0" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Stack Badges */}
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {project.stack.map((stk) => (
+                          <span
+                            key={stk}
+                            className="px-2.5 py-1 rounded text-xs font-mono bg-white/[0.03] text-[#94a3b8] border border-white/[0.06]"
+                          >
+                            {stk}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Explore Project CTA */}
+                      <div className="pt-4">
+                        <Magnetic strength={0.3}>
+                          <button
+                            onClick={() => onSelectProject(project)}
+                            className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-8 py-3.5 min-w-[220px] rounded-xl bg-[#ff5722] hover:bg-[#ff6b35] text-black font-mono text-xs font-bold tracking-wider transition-all duration-300 border border-[#ff5722] cursor-pointer shadow-[0_0_22px_rgba(255,87,34,0.38)] hover:shadow-[0_0_32px_rgba(255,87,34,0.6)] hover:scale-[1.02] active:scale-[0.98]"
+                          >
+                            <span>EXPLORE PROJECT</span>
+                            <ArrowUpRight size={16} strokeWidth={2.5} />
+                          </button>
+                        </Magnetic>
+                      </div>
                     </div>
 
-                    {/* Explore Project CTA */}
-                    <div className="pt-4">
-                      <Magnetic strength={0.3}>
+                    {/* Right Column: Abstract Interactive Simulation */}
+                    <div className="lg:col-span-6">
+                      <div className="relative group/canvas rounded-2xl overflow-hidden border border-white/[0.06]">
+                        {renderVisual(project.visualizationType)}
+
+                        {/* Click overlay prompt */}
                         <button
                           onClick={() => onSelectProject(project)}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white/[0.06] hover:bg-[#ff5722] text-[#f8fafc] hover:text-black font-mono text-xs font-semibold tracking-wider transition-all duration-300 border border-white/[0.1] hover:border-[#ff5722] cursor-pointer shadow-sm hover:shadow-[0_0_20px_rgba(255,87,34,0.4)]"
+                          className="absolute top-3 right-3 px-2.5 py-1 rounded bg-[#070709]/80 backdrop-blur-md border border-white/[0.1] text-[10px] font-mono text-[#cbd5e1] hover:text-[#ff5722] transition-colors flex items-center gap-1.5 cursor-pointer"
                         >
-                          <span>EXPLORE PROJECT</span>
-                          <ArrowUpRight size={15} />
+                          <Eye size={12} /> DEEP DIVE
                         </button>
-                      </Magnetic>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Right Column: Abstract Interactive Simulation */}
-                  <div className="lg:col-span-6">
-                    <div className="relative group/canvas">
-                      {renderVisual(project.visualizationType)}
-
-                      {/* Click overlay prompt */}
-                      <button
-                        onClick={() => onSelectProject(project)}
-                        className="absolute top-3 right-3 px-2.5 py-1 rounded bg-[#070709]/80 backdrop-blur-md border border-white/[0.1] text-[10px] font-mono text-[#cbd5e1] hover:text-[#ff5722] transition-colors flex items-center gap-1.5 cursor-pointer"
-                      >
-                        <Eye size={12} /> DEEP DIVE
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </Spotlight>
-            </div>
-          ))}
+                </Spotlight>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
-

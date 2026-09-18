@@ -1,9 +1,20 @@
+import { motion } from 'motion/react';
 import ScrollReveal from '../animations/ScrollReveal';
+import Spotlight from '../animations/Spotlight';
 import { ABOUT_DATA, PERSONAL_INFO } from '../data/portfolioData';
-import { Terminal } from 'lucide-react';
+import {
+  Terminal,
+  Layers,
+  Compass,
+  Server,
+  Rocket,
+  ArrowUpRight,
+  MapPin,
+} from 'lucide-react';
+
+const PILLAR_ICONS = [Layers, Compass, Server, Rocket];
 
 export default function About() {
-
   return (
     <section id="about" className="section-wrapper w-full relative py-24 sm:py-32 lg:py-36 bg-[#070709] border-t border-white/[0.08] overflow-hidden">
       {/* Subtle Background Accent */}
@@ -80,33 +91,87 @@ export default function About() {
           {/* Technical Pillars Column */}
           <div className="lg:col-span-5 space-y-4">
             <ScrollReveal delay={0.2}>
-              <div className="p-6 sm:p-8 rounded-2xl bg-[#0d0d14] border border-white/[0.08] relative">
-                <div className="font-mono text-xs text-[#ff6b35] tracking-widest uppercase mb-4 flex items-center justify-between">
-                  <span>ENGINEERING CAPABILITIES</span>
-                  <Terminal size={14} />
+              <Spotlight
+                spotlightColor="rgba(255, 87, 34, 0.12)"
+                spotlightSize={300}
+                className="p-6 sm:p-8 rounded-2xl bg-[#0d0d14] border border-white/[0.08] hover:border-white/[0.16] transition-colors duration-500 relative"
+              >
+                {/* Header HUD */}
+                <div className="font-mono text-xs text-[#ff6b35] tracking-widest uppercase mb-5 flex items-center justify-between pb-3 border-b border-white/[0.06] group/head">
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#ff5722] animate-pulse" />
+                    <span>ENGINEERING CAPABILITIES</span>
+                  </div>
+                  <Terminal
+                    size={14}
+                    className="text-[#64748b] group-hover/head:text-[#ff5722] group-hover/head:rotate-12 transition-all duration-300"
+                  />
                 </div>
 
-                <div className="space-y-4 divide-y divide-white/[0.06]">
-                  {ABOUT_DATA.pillars.map((pillar, idx) => (
-                    <div key={idx} className={idx > 0 ? "pt-4" : ""}>
-                      <div className="text-xs font-mono text-[#64748b] mb-1">
-                        PILLAR 0{idx + 1}
-                      </div>
-                      <div className="text-sm font-bold text-white mb-0.5">
-                        {pillar.label}
-                      </div>
-                      <div className="text-xs text-[#94a3b8] font-mono">
-                        {pillar.value}
-                      </div>
-                    </div>
-                  ))}
+                {/* Interactive Pillar Rows */}
+                <div className="space-y-3">
+                  {ABOUT_DATA.pillars.map((pillar, idx) => {
+                    const Icon = PILLAR_ICONS[idx] || Layers;
+                    return (
+                      <motion.div
+                        key={idx}
+                        whileHover={{ x: 5 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                        className="group p-3.5 sm:p-4 rounded-xl bg-white/[0.015] hover:bg-[#ff5722]/[0.05] border border-white/[0.05] hover:border-[#ff5722]/35 transition-all duration-300 relative overflow-hidden cursor-pointer"
+                      >
+                        {/* Left edge orange glow bar on hover */}
+                        <div className="absolute left-0 top-0 bottom-0 w-[2.5px] bg-gradient-to-b from-[#ff5722] to-[#ff7849] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                        {/* Top row with Pillar index and arrow indicator */}
+                        <div className="flex items-center justify-between mb-1.5">
+                          <div className="flex items-center gap-2 text-xs font-mono text-[#64748b] group-hover:text-[#ff7849] transition-colors duration-200">
+                            <Icon
+                              size={13}
+                              className="text-[#64748b] group-hover:text-[#ff5722] group-hover:scale-110 transition-all duration-200"
+                            />
+                            <span>PILLAR 0{idx + 1}</span>
+                          </div>
+                          <ArrowUpRight
+                            size={13}
+                            className="text-[#64748b] opacity-0 -translate-x-1 translate-y-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:text-[#ff5722] transition-all duration-300"
+                          />
+                        </div>
+
+                        {/* Pillar Title */}
+                        <div className="text-sm font-bold text-white group-hover:text-white transition-colors duration-200 mb-2 tracking-tight">
+                          {pillar.label}
+                        </div>
+
+                        {/* Skill Tags with Hover Glow */}
+                        <div className="flex flex-wrap gap-1.5">
+                          {pillar.value.split('•').map((tech, tIdx) => (
+                            <span
+                              key={tIdx}
+                              className="px-2 py-0.5 rounded text-[11px] font-mono bg-white/[0.02] border border-white/[0.06] text-[#94a3b8] group-hover:text-[#cbd5e1] group-hover:border-white/[0.1] hover:!text-white hover:!border-[#ff5722]/50 hover:!bg-[#ff5722]/15 transition-all duration-200"
+                            >
+                              {tech.trim()}
+                            </span>
+                          ))}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-white/[0.06] flex items-center justify-between font-mono text-xs text-[#94a3b8]">
-                  <span>CURRENT LOCATION</span>
-                  <span className="text-white font-semibold">{PERSONAL_INFO.location}</span>
+                {/* Interactive Location Footer */}
+                <div className="mt-5 pt-3.5 border-t border-white/[0.06] flex items-center justify-between font-mono text-xs text-[#94a3b8] group/loc p-2 rounded-lg hover:bg-white/[0.02] transition-colors duration-200">
+                  <span className="flex items-center gap-1.5">
+                    <MapPin
+                      size={12}
+                      className="text-[#ff5722] group-hover/loc:scale-125 transition-transform duration-300"
+                    />
+                    <span>CURRENT LOCATION</span>
+                  </span>
+                  <span className="text-white font-semibold group-hover/loc:text-[#ff7849] transition-colors duration-200">
+                    {PERSONAL_INFO.location}
+                  </span>
                 </div>
-              </div>
+              </Spotlight>
             </ScrollReveal>
           </div>
         </div>
@@ -114,4 +179,3 @@ export default function About() {
     </section>
   );
 }
-

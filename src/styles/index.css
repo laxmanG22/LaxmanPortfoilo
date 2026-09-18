@@ -59,6 +59,15 @@ body {
   width: 100%;
 }
 
+/* Hide system cursor on desktop to let custom orange point cursor shine */
+@media (pointer: fine) {
+  *,
+  *::before,
+  *::after {
+    cursor: none !important;
+  }
+}
+
 /* Canonical Global Container */
 .page-container {
   width: 100% !important;
@@ -80,7 +89,9 @@ body {
   box-sizing: border-box !important;
 }
 
-/* Explicit Overflow Control & Sticky Positioning for Engineering Stack */
+/* Explicit Overflow Control & Sticky Positioning for Flagship Projects & Engineering Stack */
+#work,
+#work .page-container,
 #stack,
 #stack .page-container {
   overflow: visible !important;
@@ -296,5 +307,224 @@ body {
   }
   .pulse-dot {
     animation: none;
+  }
+}
+
+/* ==========================================================================
+   Print Styles — Resume 2-Page Clean PDF Export
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 12mm 8mm 12mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 9.5pt !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Completely hide app shell, backdrop, and non-print items */
+  .no-print,
+  #main-content,
+  header,
+  nav,
+  footer,
+  #custom-cursor,
+  .tech-grid-bg,
+  [aria-label="Toggle Navigation Menu"] {
+    display: none !important;
+  }
+
+  /* Print visibility helpers */
+  .print-only-block {
+    display: flex !important;
+  }
+
+  .print-only-inline {
+    display: inline !important;
+  }
+
+  /* Reset modal container to normal flow document */
+  .resume-modal-root {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    z-index: auto !important;
+  }
+
+  .resume-modal-card {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  /* Strict Page Break Rules */
+  .print-page-break {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+
+  .print-avoid-break {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Crisp Print Typography & Styling */
+  .resume-modal-card h1 {
+    color: #0f172a !important;
+    font-size: 20pt !important;
+    font-weight: 800 !important;
+    line-height: 1.1 !important;
+    margin-bottom: 2px !important;
+  }
+
+  .resume-modal-card h2 {
+    color: #c2410c !important; /* Deep readable rust-orange */
+    font-size: 9pt !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding-bottom: 2px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .resume-role {
+    color: #ea580c !important;
+    font-size: 10pt !important;
+    font-weight: 700 !important;
+  }
+
+  .resume-contact-bar {
+    color: #334155 !important;
+    font-size: 8.5pt !important;
+    margin-top: 4px !important;
+    gap: 12px !important;
+  }
+
+  .resume-contact-bar a {
+    color: #334155 !important;
+    text-decoration: none !important;
+  }
+
+  .resume-icon {
+    color: #ea580c !important;
+  }
+
+  .resume-text-body {
+    color: #1e293b !important;
+    font-size: 8.5pt !important;
+    line-height: 1.35 !important;
+  }
+
+  .resume-text-muted {
+    color: #475569 !important;
+    font-size: 8pt !important;
+  }
+
+  .resume-exp-role {
+    color: #0f172a !important;
+    font-size: 10pt !important;
+    font-weight: 700 !important;
+  }
+
+  .resume-exp-period {
+    color: #c2410c !important;
+    font-size: 8pt !important;
+    font-weight: 600 !important;
+  }
+
+  .resume-skill-title {
+    color: #c2410c !important;
+    font-size: 8pt !important;
+  }
+
+  .resume-card-box {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 4px !important;
+    padding: 6px 10px !important;
+    box-shadow: none !important;
+  }
+
+  .resume-project-title {
+    color: #0f172a !important;
+    font-size: 9.5pt !important;
+    font-weight: 700 !important;
+  }
+
+  .resume-project-tagline {
+    color: #475569 !important;
+    font-size: 8pt !important;
+    font-weight: normal !important;
+  }
+
+  .resume-project-period {
+    color: #64748b !important;
+    font-size: 8pt !important;
+  }
+
+  .resume-project-stack {
+    color: #c2410c !important;
+    font-size: 7.5pt !important;
+    font-weight: 600 !important;
+  }
+
+  .resume-bullets {
+    color: #1e293b !important;
+  }
+
+  .resume-bullets li {
+    font-size: 8pt !important;
+    line-height: 1.32 !important;
+    margin-bottom: 2px !important;
+  }
+
+  .resume-edu-degree {
+    color: #0f172a !important;
+    font-size: 8.5pt !important;
+  }
+
+  .resume-edu-period {
+    color: #c2410c !important;
+    font-size: 8pt !important;
+  }
+
+  .resume-footer {
+    border-top: 1px solid #e2e8f0 !important;
+    color: #64748b !important;
+    padding-top: 6px !important;
+  }
+
+  .resume-footer-text {
+    color: #64748b !important;
+    font-size: 8pt !important;
   }
 }

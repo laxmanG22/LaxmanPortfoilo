@@ -13,6 +13,7 @@ import Contact from './sections/Contact';
 import Footer from './components/Footer';
 import CaseStudyModal from './components/CaseStudyModal';
 import ResumeModal from './components/ResumeModal';
+import FloatingLogo from './components/FloatingLogo';
 
 export default function App() {
   const [selectedProject, setSelectedProject] = useState(null);
@@ -21,13 +22,17 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#070709] text-[#f8fafc] selection:bg-[#ff5722] selection:text-black relative w-full">
       {/* Refined Desktop Custom Cursor */}
-      <CustomCursor />
+      <div className="no-print">
+        <CustomCursor />
+      </div>
 
       {/* Navigation Header */}
-      <Navbar onOpenResume={() => setIsResumeModalOpen(true)} />
+      <div className="no-print">
+        <Navbar onOpenResume={() => setIsResumeModalOpen(true)} />
+      </div>
 
       {/* Main Flow */}
-      <main id="main-content" className="w-full flex flex-col items-center">
+      <main id="main-content" className="no-print w-full flex flex-col items-center">
         <Hero />
 
         <About />
@@ -48,20 +53,27 @@ export default function App() {
       </main>
 
       {/* Minimal Footer */}
-      <Footer />
+      <div className="no-print">
+        <Footer />
+      </div>
 
       {/* Case Study Fullscreen Modal */}
-      <CaseStudyModal
-        project={selectedProject}
-        isOpen={!!selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+      <div className="no-print">
+        <CaseStudyModal
+          project={selectedProject}
+          isOpen={!!selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      </div>
 
       {/* Structured Resume Modal */}
       <ResumeModal
         isOpen={isResumeModalOpen}
         onClose={() => setIsResumeModalOpen(false)}
       />
+
+      {/* Persistent Floating LG Logo (Visible from About section to end of page) */}
+      <FloatingLogo />
     </div>
   );
 }

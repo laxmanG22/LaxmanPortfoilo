@@ -50,12 +50,12 @@ export default function Navbar({ onOpenResume }) {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3.5 sm:py-4"
         style={{
-          backgroundColor: scrolled ? 'rgba(7, 7, 9, 0.88)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(16px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid transparent',
+          backgroundColor: scrolled ? 'rgba(7, 7, 9, 0.28)' : 'rgba(7, 7, 9, 0.12)',
+          backdropFilter: 'blur(24px) saturate(190%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(190%)',
+          borderBottom: scrolled ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(255, 255, 255, 0.03)',
         }}
       >
         <div className="page-container w-full max-w-[1400px] mx-auto px-5 sm:px-10 lg:px-16 flex items-center justify-between">
@@ -111,9 +111,9 @@ export default function Navbar({ onOpenResume }) {
             <Magnetic strength={0.3}>
               <button
                 onClick={onOpenResume}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono bg-white/[0.04] hover:bg-[#ff5722]/10 text-[#cbd5e1] hover:text-[#ff6b35] border border-white/[0.1] hover:border-[#ff5722]/40 transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono bg-[#ff5722]/15 text-[#ff7849] border border-[#ff5722]/40 hover:bg-[#ff5722]/25 hover:border-[#ff5722]/60 hover:text-white transition-all cursor-pointer shadow-[0_0_12px_rgba(255,87,34,0.15)]"
               >
-                <FileText size={12} />
+                <FileText size={12} className="text-[#ff7849]" />
                 <span>RESUME</span>
               </button>
             </Magnetic>
@@ -123,7 +123,7 @@ export default function Navbar({ onOpenResume }) {
           <div className="flex items-center gap-3 md:hidden">
             <button
               onClick={onOpenResume}
-              className="px-2.5 py-1 rounded-full text-[11px] font-mono bg-white/[0.05] text-[#cbd5e1] border border-white/[0.1]"
+              className="px-2.5 py-1 rounded-full text-[11px] font-mono bg-[#ff5722]/15 text-[#ff7849] border border-[#ff5722]/40 hover:bg-[#ff5722]/25"
             >
               CV
             </button>

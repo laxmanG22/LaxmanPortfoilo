@@ -25,19 +25,26 @@ export default function ResumeModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   const handlePrint = () => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'visible';
     window.print();
+    setTimeout(() => {
+      if (isOpen) {
+        document.body.style.overflow = prevOverflow || 'hidden';
+      }
+    }, 500);
   };
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 resume-modal-root">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-black/85 backdrop-blur-md"
+          className="absolute inset-0 bg-black/85 backdrop-blur-md no-print"
         />
 
         {/* Modal Window */}
@@ -46,10 +53,10 @@ export default function ResumeModal({ isOpen, onClose }) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 15 }}
           transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-[#0a0a0e] border border-white/[0.12] rounded-xl shadow-2xl p-6 sm:p-10 text-[#e2e8f0]"
+          className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-[#0a0a0e] border border-white/[0.12] rounded-xl shadow-2xl p-6 sm:p-10 text-[#e2e8f0] resume-modal-card"
         >
           {/* Action Bar */}
-          <div className="flex items-center justify-between pb-6 border-b border-white/[0.08] mb-8">
+          <div className="flex items-center justify-between pb-6 border-b border-white/[0.08] mb-8 no-print">
             <div className="flex items-center gap-2 font-mono text-xs text-[#ff5722]">
               <span className="w-2 h-2 rounded-full bg-[#ff5722]" />
               VERIFIED RESUME RECORD
@@ -57,7 +64,7 @@ export default function ResumeModal({ isOpen, onClose }) {
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrint}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/[0.05] hover:bg-white/[0.1] text-xs font-mono text-[#cbd5e1] hover:text-white transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/[0.05] hover:bg-[#ff5722]/15 text-xs font-mono text-[#cbd5e1] hover:text-[#ff7849] border border-white/[0.1] hover:border-[#ff5722]/40 transition-colors cursor-pointer"
                 title="Print or Save as PDF"
               >
                 <Printer size={13} />
@@ -65,150 +72,165 @@ export default function ResumeModal({ isOpen, onClose }) {
               </button>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-[#94a3b8] hover:text-white transition-colors"
+                className="p-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] text-[#94a3b8] hover:text-white transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
             </div>
           </div>
 
-          {/* Resume Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">
-              {PERSONAL_INFO.name}
-            </h1>
-            <div className="text-[#ff7849] font-mono text-sm font-semibold mt-1">
-              {PERSONAL_INFO.role}
-            </div>
-            <div className="flex flex-wrap gap-4 mt-3 text-xs font-mono text-[#94a3b8]">
-              <a
-                href={`mailto:${PERSONAL_INFO.email}`}
-                className="flex items-center gap-1.5 hover:text-[#ff5722] text-decoration-none text-inherit transition-colors"
-              >
-                <Mail size={12} /> {PERSONAL_INFO.email}
-              </a>
-              <a
-                href={`tel:${PERSONAL_INFO.phone}`}
-                className="flex items-center gap-1.5 hover:text-[#ff5722] text-decoration-none text-inherit transition-colors"
-              >
-                <Phone size={12} /> +91 {PERSONAL_INFO.phone}
-              </a>
-              <span className="flex items-center gap-1.5">
-                <MapPin size={12} /> {PERSONAL_INFO.location}
-              </span>
-            </div>
-          </div>
-
-          {/* Section: Professional Summary */}
-          <div className="mb-8">
-            <h2 className="text-xs font-mono tracking-widest text-[#ff5722] uppercase mb-2">
-              // Summary
-            </h2>
-            <p className="text-sm text-[#cbd5e1] leading-relaxed">
-              {PERSONAL_INFO.tagline} Experienced in full-lifecycle mobile engineering (React Native) and modern responsive web systems (React.js), with deep background in geospatial mapping, custom polygons, enterprise RBAC security, and scalable REST API integration.
-            </p>
-          </div>
-
-          {/* Section: Experience */}
-          <div className="mb-8">
-            <h2 className="text-xs font-mono tracking-widest text-[#ff5722] uppercase mb-4 flex items-center gap-2">
-              <Briefcase size={14} /> Professional Experience
-            </h2>
-            {EXPERIENCE_DATA.map((exp, idx) => (
-              <div key={idx} className="mb-4">
-                <div className="flex flex-wrap items-baseline justify-between">
-                  <div className="text-base font-bold text-white">{exp.role}</div>
-                  <div className="text-xs font-mono text-[#ff6b35]">{exp.period}</div>
-                </div>
-                <div className="text-xs text-[#94a3b8] font-mono mb-2">
-                  {exp.company} • {exp.location}
-                </div>
-                <ul className="space-y-1.5 pl-4 text-xs text-[#cbd5e1] list-disc">
-                  {exp.responsibilities.map((r, i) => (
-                    <li key={i} className="leading-relaxed">{r}</li>
-                  ))}
-                </ul>
+          {/* PAGE 1 CONTENT */}
+          <div className="resume-page-1">
+            {/* Resume Header */}
+            <div className="mb-6 resume-header print-avoid-break">
+              <h1 className="text-3xl font-extrabold text-white tracking-tight">
+                {PERSONAL_INFO.name}
+              </h1>
+              <div className="text-[#ff7849] font-mono text-sm font-semibold mt-1 resume-role">
+                {PERSONAL_INFO.role}
               </div>
-            ))}
-          </div>
+              <div className="flex flex-wrap gap-4 mt-3 text-xs font-mono text-[#94a3b8] resume-contact-bar">
+                <a
+                  href={`mailto:${PERSONAL_INFO.email}`}
+                  className="flex items-center gap-1.5 hover:text-[#ff5722] text-decoration-none text-inherit transition-colors"
+                >
+                  <Mail size={12} className="resume-icon" /> {PERSONAL_INFO.email}
+                </a>
+                <a
+                  href={`tel:${PERSONAL_INFO.phone}`}
+                  className="flex items-center gap-1.5 hover:text-[#ff5722] text-decoration-none text-inherit transition-colors"
+                >
+                  <Phone size={12} className="resume-icon" /> +91 {PERSONAL_INFO.phone}
+                </a>
+                <span className="flex items-center gap-1.5">
+                  <MapPin size={12} className="resume-icon" /> {PERSONAL_INFO.location}
+                </span>
+              </div>
+            </div>
 
-          {/* Section: Flagship Projects */}
-          <div className="mb-8">
-            <h2 className="text-xs font-mono tracking-widest text-[#ff5722] uppercase mb-4 flex items-center gap-2">
-              <Cpu size={14} /> Key Engineering Projects
-            </h2>
-            <div className="space-y-4">
-              {PROJECTS_DATA.map((p) => (
-                <div key={p.id} className="p-3.5 rounded bg-white/[0.02] border border-white/[0.06]">
-                  <div className="flex items-baseline justify-between">
-                    <div className="text-sm font-bold text-white">{p.name} — <span className="font-normal text-xs text-[#94a3b8]">{p.tagline}</span></div>
-                    <div className="text-xs font-mono text-[#64748b]">{p.period}</div>
+            {/* Section: Professional Summary */}
+            <div className="mb-6 resume-section print-avoid-break">
+              <h2 className="text-xs font-mono tracking-widest text-[#ff5722] uppercase mb-2">
+                // Summary
+              </h2>
+              <p className="text-sm text-[#cbd5e1] leading-relaxed resume-text-body">
+                {PERSONAL_INFO.tagline} Experienced in full-lifecycle mobile engineering (React Native) and modern responsive web systems (React.js), with deep background in geospatial mapping, custom polygons, enterprise RBAC security, and scalable REST API integration.
+              </p>
+            </div>
+
+            {/* Section: Technical Stack & Tools */}
+            <div className="mb-6 resume-section print-avoid-break">
+              <h2 className="text-xs font-mono tracking-widest text-[#ff5722] uppercase mb-3">
+                // Technical Stack & Tools
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                <div className="p-3 rounded bg-white/[0.02] border border-white/[0.05] resume-card-box">
+                  <span className="font-mono text-[#ff7849] font-semibold block mb-1 resume-skill-title">Frontend & Mobile:</span>
+                  <span className="text-[#cbd5e1] resume-text-body">React.js, React Native, JavaScript, HTML5, CSS</span>
+                </div>
+                <div className="p-3 rounded bg-white/[0.02] border border-white/[0.05] resume-card-box">
+                  <span className="font-mono text-[#ff7849] font-semibold block mb-1 resume-skill-title">Backend & Database:</span>
+                  <span className="text-[#cbd5e1] resume-text-body">Node.js, Express.js, REST APIs, MySQL</span>
+                </div>
+                <div className="p-3 rounded bg-white/[0.02] border border-white/[0.05] resume-card-box">
+                  <span className="font-mono text-[#ff7849] font-semibold block mb-1 resume-skill-title">Tools & Platforms:</span>
+                  <span className="text-[#cbd5e1] resume-text-body">Git, GitHub, VS Code, Postman, Android Studio, Xcode</span>
+                </div>
+                <div className="p-3 rounded bg-white/[0.02] border border-white/[0.05] resume-card-box">
+                  <span className="font-mono text-[#ff7849] font-semibold block mb-1 resume-skill-title">Publishing & AI:</span>
+                  <span className="text-[#cbd5e1] resume-text-body">Google Play Console, App Store Connect, ChatGPT, Cursor, Copilot, Claude, Cline, Antigravity</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Section: Experience */}
+            <div className="mb-6 resume-section print-avoid-break">
+              <h2 className="text-xs font-mono tracking-widest text-[#ff5722] uppercase mb-3 flex items-center gap-2">
+                <Briefcase size={14} className="resume-icon" /> Professional Experience
+              </h2>
+              {EXPERIENCE_DATA.map((exp, idx) => (
+                <div key={idx} className="mb-3">
+                  <div className="flex flex-wrap items-baseline justify-between">
+                    <div className="text-base font-bold text-white resume-exp-role">{exp.role}</div>
+                    <div className="text-xs font-mono text-[#ff6b35] resume-exp-period">{exp.period}</div>
                   </div>
-                  <div className="text-xs text-[#ff7849] font-mono my-1">
-                    {p.stack.join(' • ')}
+                  <div className="text-xs text-[#94a3b8] font-mono mb-2 resume-text-muted">
+                    {exp.company} • {exp.location}
                   </div>
-                  <ul className="space-y-1 pl-4 text-xs text-[#cbd5e1] list-disc mt-2">
-                    {p.whatIBuilt.map((w, i) => (
-                      <li key={i}>{w}</li>
+                  <ul className="space-y-1 pl-4 text-xs text-[#cbd5e1] list-disc resume-bullets">
+                    {exp.responsibilities.map((r, i) => (
+                      <li key={i} className="leading-relaxed resume-text-body">{r}</li>
                     ))}
                   </ul>
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* Section: Technical Stack */}
-          <div className="mb-8">
-            <h2 className="text-xs font-mono tracking-widest text-[#ff5722] uppercase mb-3">
-              // Technical Stack & Tools
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded bg-white/[0.02] border border-white/[0.05]">
-                <span className="font-mono text-[#ff7849] font-semibold block mb-1">Frontend & Mobile:</span>
-                <span className="text-[#cbd5e1]">React.js, React Native, JavaScript, HTML5, CSS</span>
-              </div>
-              <div className="p-3 rounded bg-white/[0.02] border border-white/[0.05]">
-                <span className="font-mono text-[#ff7849] font-semibold block mb-1">Backend & Database:</span>
-                <span className="text-[#cbd5e1]">Node.js, Express.js, REST APIs, MySQL</span>
-              </div>
-              <div className="p-3 rounded bg-white/[0.02] border border-white/[0.05]">
-                <span className="font-mono text-[#ff7849] font-semibold block mb-1">Tools & Platforms:</span>
-                <span className="text-[#cbd5e1]">Git, GitHub, VS Code, Postman, Android Studio, Xcode</span>
-              </div>
-              <div className="p-3 rounded bg-white/[0.02] border border-white/[0.05]">
-                <span className="font-mono text-[#ff7849] font-semibold block mb-1">Publishing & AI:</span>
-                <span className="text-[#cbd5e1]">Google Play Console, App Store Connect, ChatGPT, Cursor, Copilot, Claude, Cline</span>
-              </div>
+            {/* Print Page 1 Footer Note (Visible only in print) */}
+            <div className="hidden print-only-block text-[9px] font-mono text-[#94a3b8] pt-2 border-t border-gray-200 justify-between">
+              <span>Laxman Gudimalla • Resume</span>
+              <span>Page 1 of 2</span>
             </div>
           </div>
 
-          {/* Section: Education */}
-          <div className="mb-6">
-            <h2 className="text-xs font-mono tracking-widest text-[#ff5722] uppercase mb-3 flex items-center gap-2">
-              <GraduationCap size={14} /> Education
-            </h2>
-            <div className="space-y-2">
-              {EDUCATION_DATA.map((edu, idx) => (
-                <div key={idx} className="flex justify-between items-baseline text-xs">
-                  <div>
-                    <span className="font-semibold text-white">{edu.degree}</span>
-                    <span className="text-[#94a3b8]"> — {edu.institution}, {edu.location}</span>
+          {/* PAGE 2 CONTENT */}
+          <div className="resume-page-2 print-page-break">
+            {/* Section: Flagship Projects */}
+            <div className="mb-6 resume-section">
+              <h2 className="text-xs font-mono tracking-widest text-[#ff5722] uppercase mb-3 flex items-center gap-2">
+                <Cpu size={14} className="resume-icon" /> Key Engineering Projects
+              </h2>
+              <div className="space-y-3">
+                {PROJECTS_DATA.map((p) => (
+                  <div key={p.id} className="p-3 rounded bg-white/[0.02] border border-white/[0.06] resume-card-box print-avoid-break">
+                    <div className="flex items-baseline justify-between">
+                      <div className="text-sm font-bold text-white resume-project-title">
+                        {p.name} — <span className="font-normal text-xs text-[#94a3b8] resume-project-tagline">{p.tagline}</span>
+                      </div>
+                      <div className="text-xs font-mono text-[#64748b] resume-project-period">{p.period}</div>
+                    </div>
+                    <div className="text-xs text-[#ff7849] font-mono my-1 resume-project-stack">
+                      {p.stack.join(' • ')}
+                    </div>
+                    <ul className="space-y-0.5 pl-4 text-xs text-[#cbd5e1] list-disc mt-1.5 resume-bullets">
+                      {p.whatIBuilt.map((w, i) => (
+                        <li key={i} className="leading-relaxed resume-text-body">{w}</li>
+                      ))}
+                    </ul>
                   </div>
-                  <span className="font-mono text-[#ff6b35]">{edu.period}</span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Footer Note */}
-          <div className="pt-6 border-t border-white/[0.08] flex justify-between items-center text-xs font-mono text-[#64748b]">
-            <span>Laxman Gudimalla • Resume Record</span>
-            <button
-              onClick={onClose}
-              className="text-[#ff5722] hover:underline"
-            >
-              CLOSE
-            </button>
+            {/* Section: Education */}
+            <div className="mb-6 resume-section print-avoid-break">
+              <h2 className="text-xs font-mono tracking-widest text-[#ff5722] uppercase mb-3 flex items-center gap-2">
+                <GraduationCap size={14} className="resume-icon" /> Education
+              </h2>
+              <div className="space-y-2">
+                {EDUCATION_DATA.map((edu, idx) => (
+                  <div key={idx} className="flex justify-between items-baseline text-xs">
+                    <div>
+                      <span className="font-semibold text-white resume-edu-degree">{edu.degree}</span>
+                      <span className="text-[#94a3b8] resume-text-muted"> — {edu.institution}, {edu.location}</span>
+                    </div>
+                    <span className="font-mono text-[#ff6b35] resume-edu-period">{edu.period}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer Note */}
+            <div className="pt-6 border-t border-white/[0.08] flex justify-between items-center text-xs font-mono text-[#64748b] resume-footer">
+              <span className="resume-footer-text">Laxman Gudimalla • Resume Record</span>
+              <span className="hidden print-only-inline">Page 2 of 2</span>
+              <button
+                onClick={onClose}
+                className="text-[#ff5722] hover:underline no-print cursor-pointer"
+              >
+                CLOSE
+              </button>
+            </div>
           </div>
         </motion.div>
       </div>
