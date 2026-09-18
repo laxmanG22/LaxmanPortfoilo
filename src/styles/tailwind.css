@@ -1,0 +1,21 @@
+@import "tailwindcss";
+@source "../**";
+@source "../../index.html";
+
+@utility page-container {
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1.25rem, 5vw, 4rem);
+  padding-right: clamp(1.25rem, 5vw, 4rem);
+}
+
+@utility section-wrapper {
+  width: 100%;
+  position: relative;
+  padding-top: clamp(5.5rem, 9vw, 9rem);
+  padding-bottom: clamp(5.5rem, 9vw, 9rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+

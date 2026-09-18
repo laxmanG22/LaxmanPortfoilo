@@ -1,0 +1,300 @@
+/* Design System & Global Styles — Laxman Gudimalla Portfolio */
+
+:root {
+  /* Layout Tokens */
+  --page-max-width: 1400px;
+  --page-padding-x: clamp(1.25rem, 5vw, 4rem);
+  --section-padding-y: clamp(5.5rem, 9vw, 9rem);
+
+  /* Background Tokens */
+  --bg-primary: #070709;
+  --bg-secondary: #0d0d12;
+  --bg-tertiary: #121218;
+  --bg-card: rgba(18, 18, 24, 0.75);
+  --bg-card-hover: rgba(26, 26, 36, 0.85);
+  --bg-card-border: rgba(255, 255, 255, 0.07);
+
+  /* Accent Tokens */
+  --orange-primary: #ff5722;
+  --orange-bright: #ff6b35;
+  --orange-light: #ff8a65;
+  --orange-glow: rgba(255, 87, 34, 0.22);
+  --orange-glow-subtle: rgba(255, 87, 34, 0.08);
+  --orange-border: rgba(255, 87, 34, 0.35);
+
+  /* Typography Colors */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-dim: #475569;
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.22);
+
+  /* Fonts */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Easing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  background-color: var(--bg-primary);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  width: 100%;
+}
+
+/* Canonical Global Container */
+.page-container {
+  width: 100% !important;
+  max-width: var(--page-max-width, 1400px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: var(--page-padding-x, clamp(1.25rem, 5vw, 4rem)) !important;
+  padding-right: var(--page-padding-x, clamp(1.25rem, 5vw, 4rem)) !important;
+  box-sizing: border-box !important;
+}
+
+/* Canonical Section Wrapper */
+.section-wrapper {
+  width: 100% !important;
+  position: relative !important;
+  padding-top: var(--section-padding-y, clamp(5.5rem, 9vw, 9rem)) !important;
+  padding-bottom: var(--section-padding-y, clamp(5.5rem, 9vw, 9rem)) !important;
+  border-top: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08)) !important;
+  box-sizing: border-box !important;
+}
+
+/* Explicit Overflow Control & Sticky Positioning for Engineering Stack */
+#stack,
+#stack .page-container {
+  overflow: visible !important;
+}
+
+@media (min-width: 1024px) {
+  .stack-sticky-panel {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 100px !important;
+    align-self: flex-start !important;
+    z-index: 20 !important;
+  }
+}
+
+/* Technical Grid Background Pattern */
+.tech-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.tech-dots-bg {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Subtle scanlines effect */
+.scanline-overlay {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+/* Selection Color */
+::selection {
+  background: var(--orange-primary);
+  color: #000000;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #070709;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--orange-primary);
+}
+
+/* Typography Helpers */
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.tracking-widest-technical {
+  letter-spacing: 0.18em;
+}
+
+/* Glass & Border Utilities */
+.glass-panel {
+  background: rgba(13, 13, 18, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  transition: border-color 0.3s ease, transform 0.3s var(--ease-out-expo), box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--orange-border);
+  box-shadow: 0 10px 30px -10px var(--orange-glow);
+}
+
+/* Orange Glows */
+.orange-glow-radial {
+  background: radial-gradient(circle, var(--orange-glow) 0%, transparent 70%);
+}
+
+.orange-glow-sm {
+  box-shadow: 0 0 15px var(--orange-glow);
+}
+
+.orange-glow-md {
+  box-shadow: 0 0 30px var(--orange-glow);
+}
+
+/* Technical Badges & Status */
+.tech-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+}
+
+.tech-badge:hover {
+  border-color: var(--orange-border);
+  color: var(--text-primary);
+  background: rgba(255, 87, 34, 0.06);
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--orange-primary);
+  box-shadow: 0 0 8px var(--orange-primary);
+  animation: pulse-ring 2s infinite ease-in-out;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 87, 34, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 8px rgba(255, 87, 34, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 87, 34, 0);
+  }
+}
+
+/* Primary Action Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 30px;
+  background: var(--orange-primary);
+  color: #000000;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  background: var(--orange-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px var(--orange-glow);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  border-radius: 8px;
+  border: 1px solid var(--border-medium);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--orange-border);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Reduced Motion Fallbacks */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .pulse-dot {
+    animation: none;
+  }
+}
